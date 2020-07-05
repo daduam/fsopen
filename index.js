@@ -54,16 +54,37 @@ const generateId = () => {
   
   const max = min + 10;
   
-  const id = Math.floor(Math.random() * (max - min)) + min;
+  const id = Math.floor(Math.random() * (max - min)) + min + 1;
 
   return id;
 }
 
 // add a new entry using post
 app.post('/api/persons', (req, res) => {
-  const entry = req.body;
+  const body = req.body;
 
-  entry.id = generateId();
+  // error checking
+  if (!body.name) {
+    return res.status(400).json({
+      error: 'name missing'
+    });
+  }
+  if (!body.number) {
+    return res.status(400).json({
+      error: 'number missing'
+    });
+  }
+  if (persons.find(entry => entry.name === body.name) !== undefined) {
+    return res.status(400).json({
+      error: 'name must be unique'
+    });
+  }
+
+  const entry = {
+    name: body.name,
+    number: body.number,
+    id: generateId()
+  };
 
   persons = persons.concat(entry);
 
