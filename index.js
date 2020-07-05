@@ -1,6 +1,9 @@
 const express = require('express');
+const { response } = require('express');
 
 const app = express();
+
+app.use(express.json());
 
 
 let persons = [
@@ -41,7 +44,31 @@ app.get('/info', (req, res) => {
 // phonebook api stuff
 app.get('/api/persons', (req, res) => {
   res.json(persons);
-})
+});
+
+// generates id for new entries
+const generateId = () => {
+  const min = persons.length > 0
+    ? Math.max(...persons.map(entry => entry.id))
+    : 0;
+  
+  const max = min + 10;
+  
+  const id = Math.floor(Math.random() * (max - min)) + min;
+
+  return id;
+}
+
+// add a new entry using post
+app.post('/api/persons', (req, res) => {
+  const entry = req.body;
+
+  entry.id = generateId();
+
+  persons = persons.concat(entry);
+
+  res.json(entry);
+});
 
 // displaying information of a single phonebook entry
 app.get('/api/persons/:id', (req, res) => {
