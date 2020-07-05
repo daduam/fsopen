@@ -1,5 +1,4 @@
 const express = require('express');
-const { response } = require('express');
 
 const app = express();
 
@@ -31,6 +30,15 @@ app.get('/', (request, response) => {
     response.send('<h1>Phonebook</h1>');
 })
 
+// api info
+app.get('/info', (request, response) => {
+    response.send(`
+        <p>Phonebook has info for ${persons.length} people</p>
+        <p>${Date()}</p>
+    `);
+});
+
+// phonebook api stuff
 app.get('/api/persons', (request, response) => {
     response.json(persons);
 })
