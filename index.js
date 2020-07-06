@@ -1,10 +1,22 @@
 const express = require('express');
 const morgan = require('morgan');
 
+morgan.token('post-content', (req, res) => {
+  return JSON.stringify(req.body);
+});
+
 const app = express();
 
 app.use(express.json());
-app.use(morgan('tiny'));
+
+// morgan request logging - adds req method for post requests
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-content', {
+  skip: (req, res) => { return req.method !== 'POST'; }
+}));
+
+app.use(morgan('tiny', {
+  skip: (req, res) => { return req.method === 'POST'; }
+}));
 
 let persons = [
   {
