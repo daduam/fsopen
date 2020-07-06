@@ -1,10 +1,10 @@
 const express = require('express');
-const { response } = require('express');
+const morgan = require('morgan');
 
 const app = express();
 
 app.use(express.json());
-
+app.use(morgan('tiny'));
 
 let persons = [
   {
@@ -27,11 +27,11 @@ let persons = [
     number: "39-23-6423122",
     id: 4
   }
-]
+];
 
 app.get('/', (req, res) => {
   res.send('<h1>Phonebook</h1>');
-})
+});
 
 // api info
 app.get('/info', (req, res) => {
