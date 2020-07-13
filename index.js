@@ -112,15 +112,9 @@ app.post('/api/persons', (req, res) => {
 
 // displaying information of a single phonebook entry
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const entry = persons.find(entry => entry.id === id);
-
-  if (entry) {
+  Entry.findById(req.params.id).then(entry => {
     res.json(entry);
-  }
-  else {
-    res.status(404).end();
-  }
+  });
 });
 
 // delete a single phonebook entry
