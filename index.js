@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const Entry = require('./models/entry');
 
 morgan.token('post-content', (req, res) => {
   return JSON.stringify(req.body);
@@ -58,7 +60,9 @@ app.get('/info', (req, res) => {
 
 // phonebook api stuff
 app.get('/api/persons', (req, res) => {
-  res.json(persons);
+  Entry.find({}).then(entries => {
+    res.json(entries);
+  });
 });
 
 // generates id for new entries
@@ -127,7 +131,7 @@ app.delete('/api/persons/:id', (req, res) => {
   res.status(204).end();
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
