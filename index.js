@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const Entry = require('./models/entry');
 
 morgan.token('post-content', (req, res) => {
   return JSON.stringify(req.body);
@@ -58,7 +60,9 @@ app.get('/info', (req, res) => {
 
 // phonebook api stuff
 app.get('/api/persons', (req, res) => {
-  res.json(persons);
+  Entry.find({}).then(entries => {
+    res.json(entries);
+  });
 });
 
 // generates id for new entries
@@ -108,15 +112,9 @@ app.post('/api/persons', (req, res) => {
 
 // displaying information of a single phonebook entry
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const entry = persons.find(entry => entry.id === id);
-
-  if (entry) {
+  Entry.findById(req.params.id).then(entry => {
     res.json(entry);
-  }
-  else {
-    res.status(404).end();
-  }
+  });
 });
 
 // delete a single phonebook entry
