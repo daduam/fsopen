@@ -99,15 +99,14 @@ app.post('/api/persons', (req, res) => {
     });
   }
 
-  const entry = {
+  const entry = new Entry({
     name: body.name,
     number: body.number,
-    id: generateId()
-  };
+  });
 
-  persons = persons.concat(entry);
-
-  res.json(entry);
+  entry.save().then(savedNote => {
+    res.json(entry);
+  });
 });
 
 // displaying information of a single phonebook entry
