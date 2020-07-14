@@ -130,6 +130,23 @@ app.get('/api/persons/:id', (req, res, next) => {
     .catch(error => next(error));
 });
 
+// update entry
+app.put('/api/persons/:id', (req, res, next) => {
+  const body = req.body;
+
+  const entry = {
+    name: body.name,
+    number: body.number,
+  };
+
+  Entry
+    .findByIdAndUpdate(req.params.id, entry, { new: true })
+    .then(updatedEntry => {
+      res.json(updatedEntry);
+    })
+    .catch(error => next(error));
+});
+
 // delete a single phonebook entry
 app.delete('/api/persons/:id', (req, res, next) => {
   Entry
