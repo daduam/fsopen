@@ -52,10 +52,15 @@ app.get('/', (req, res) => {
 
 // api info
 app.get('/info', (req, res) => {
-  res.send(`
-    <p>Phonebook has info for ${persons.length} people</p>
-    <p>${Date()}</p>
-  `);
+  Entry
+    .estimatedDocumentCount()
+    .then(count => {
+      res.send(`
+        <p>Phonebook has info for ${count} people</p>
+        <p>${Date()}</p>
+      `);
+    })
+    .catch(error => next(error));
 });
 
 // phonebook api stuff
