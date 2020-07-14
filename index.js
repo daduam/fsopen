@@ -59,10 +59,13 @@ app.get('/info', (req, res) => {
 });
 
 // phonebook api stuff
-app.get('/api/persons', (req, res) => {
-  Entry.find({}).then(entries => {
-    res.json(entries);
-  });
+app.get('/api/persons', (req, res, next) => {
+  Entry
+    .find({})
+    .then(entries => {
+      res.json(entries);
+    })
+    .catch(error => next(error));
 });
 
 // generates id for new entries
@@ -79,7 +82,7 @@ const generateId = () => {
 }
 
 // add a new entry using post
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body;
 
   // error checking
@@ -104,27 +107,50 @@ app.post('/api/persons', (req, res) => {
     number: body.number,
   });
 
-  entry.save().then(savedNote => {
-    res.json(entry);
-  });
+  entry
+    .save()
+    .then(savedNote => {
+      res.json(entry);
+    })
+    .catch(error => next(error));
 });
 
 // displaying information of a single phonebook entry
-app.get('/api/persons/:id', (req, res) => {
-  Entry.findById(req.params.id).then(entry => {
-    res.json(entry);
-  });
+app.get('/api/persons/:id', (req, res, next) => {
+  Entry
+    .findById(req.params.id)
+    .then(entry => {
+      if (entry) {
+        res.json(entry);
+      }
+      else {
+        res.status(404).end();
+      }
+    })
+    .catch(error => next(error));
 });
 
 // delete a single phonebook entry
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   Entry
     .findByIdAndRemove(req.params.id)
     .then(result => {
       res.status(204).end();
     })
-    .catch(error => console.error(error.name));
+    .catch(error => next(error));
 });
+
+// error handler middleware
+const errorHandler = (error, req, res, next) => {
+  console.error(error.message);
+  
+  if (error.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' });
+  }
+
+  next(error);
+};
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
