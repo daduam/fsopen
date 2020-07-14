@@ -118,10 +118,12 @@ app.get('/api/persons/:id', (req, res) => {
 
 // delete a single phonebook entry
 app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
-  persons = persons.filter(entry => entry.id !== id);
-
-  res.status(204).end();
+  Entry
+    .findByIdAndRemove(req.params.id)
+    .then(result => {
+      res.status(204).end();
+    })
+    .catch(error => console.error(error.name));
 });
 
 const PORT = process.env.PORT;
