@@ -139,8 +139,14 @@ app.put('/api/persons/:id', (req, res, next) => {
     number: body.number,
   };
 
+  const opts = {
+    new: true,
+    runValidators: true,
+    context: 'query'
+  };
+
   Entry
-    .findByIdAndUpdate(req.params.id, entry, { new: true, runValidators: true })
+    .findByIdAndUpdate(req.params.id, entry, opts)
     .then(updatedEntry => {
       res.json(updatedEntry);
     })
