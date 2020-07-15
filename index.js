@@ -101,11 +101,6 @@ app.post('/api/persons', (req, res, next) => {
       error: 'number missing'
     });
   }
-  if (persons.find(entry => entry.name === body.name) !== undefined) {
-    return res.status(400).json({
-      error: 'name must be unique'
-    });
-  }
 
   const entry = new Entry({
     name: body.name,
@@ -168,6 +163,8 @@ const errorHandler = (error, req, res, next) => {
   
   if (error.name === 'CastError') {
     return res.status(400).send({ error: 'malformatted id' });
+  } else if (error.name === 'ValidationError') {
+    return res.status(400).json({ error: error.message });
   }
 
   next(error);
