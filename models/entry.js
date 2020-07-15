@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-underscore-dangle */
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
@@ -6,13 +8,13 @@ mongoose.set('useCreateIndex', true);
 
 const url = process.env.MONGODB_URI;
 
-
 console.log(`connecting to mongodb at ${url}`);
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(result => {
+  // eslint-disable-next-line no-unused-vars
+  .then((result) => {
     console.log('connected to MongoDB');
   })
-  .catch(error => {
+  .catch((error) => {
     console.log(`error connecting to MongoDB: ${error.message}`);
   });
 
@@ -21,13 +23,13 @@ const entrySchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 3,
-    unique: true
+    unique: true,
   },
   number: {
     type: String,
     minlength: 8,
-    required: true
-  }
+    required: true,
+  },
 });
 
 entrySchema.plugin(uniqueValidator);
@@ -37,8 +39,7 @@ entrySchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
-  }
+  },
 });
 
 module.exports = mongoose.model('Entry', entrySchema);
-
