@@ -25,7 +25,7 @@ const entrySchema = new mongoose.Schema({
   },
   number: {
     type: String,
-    minlength: 8
+    minlength: 8,
     required: true
   }
 });
