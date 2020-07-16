@@ -4,6 +4,7 @@
   "description": "A blog list application that allows users to save information about interesting blogs they have stumbled across on the internet",
   "main": "index.js",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1"
   },
   "devDependencies": {
