@@ -1,0 +1,27 @@
+{
+  "name": "blog-list",
+  "version": "1.0.0",
+  "description": "A blog list application that allows users to save information about interesting blogs they have stumbled across on the internet",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daduam/fullstackopen-part4.git"
+  },
+  "author": "Joseph Ampadu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/daduam/fullstackopen-part4/issues"
+  },
+  "homepage": "https://github.com/daduam/fullstackopen-part4#readme"
+}
