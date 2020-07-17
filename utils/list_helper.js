@@ -1,4 +1,4 @@
-const _ = require('lodash')
+// const _ = require('lodash')
 
 const dummy = (blogs) => {
   return 1
@@ -26,11 +26,31 @@ const favoriteBlog = (blogs) => {
 }
 
 // author with the most blogs in a list of blogs
+/*
 const mostBlogs = (blogs) => {
   if (blogs.length === 0) {
     return {}
   }
   const result = _.countBy(blogs, 'author')
+  const most = Math.max(...Object.values(result))
+  const author = Object.keys(result).find(author => result[author] === most)
+  return {
+    author: author,
+    blogs: most
+  }
+}
+*/
+
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0) {
+    return {}
+  }
+  const result = blogs.reduce((result, blog) => {
+    result[blog.author] = result[blog.author] === undefined
+      ? 1
+      : result[blog.author] + 1
+    return result
+  }, {})
   const most = Math.max(...Object.values(result))
   const author = Object.keys(result).find(author => result[author] === most)
   return {
