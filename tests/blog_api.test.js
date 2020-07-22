@@ -5,7 +5,6 @@ const helper = require('./api_test_helper')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
-const blogsRouter = require('../controllers/blogs')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
