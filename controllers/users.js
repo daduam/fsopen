@@ -16,7 +16,6 @@ usersRouter.get('/', async (req, res) => {
 
 usersRouter.post('/', async (req, res) => {
   const { body } = req
-  const blog = (await Blog.find({}))[0]
 
   if (!(body.password && body.password.length >= 3)) {
     return res.status(400).json({ error: 'password should be at least 3 characters long' })
@@ -28,7 +27,7 @@ usersRouter.post('/', async (req, res) => {
   const user = new User({
     username: body.username,
     name: body.name,
-    blogs: [blog._id],
+    blogs: [],
     passwordHash
   })
 
