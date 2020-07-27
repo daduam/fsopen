@@ -56,7 +56,7 @@ const App = () => {
       setNotifyType('error')
       setTimeout(() => {
         setNotifyMessage(null)
-      }, 3000);
+      }, 3000)
     }
   }
 
@@ -149,7 +149,7 @@ const App = () => {
       <Togglable buttonLabel='new blog'>
         <BlogForm createBlog={createBlog} />
       </Togglable>
-      
+
       <div style={{ marginTop: '1em' }}>
         {blogsByLikes.map(blog =>
           <Blog
@@ -158,8 +158,8 @@ const App = () => {
             likeBlog={likeBlog}
             creator={
               blog.user
-              ? blog.user.username === user.username
-              : false
+                ? blog.user.username === user.username
+                : false
             }
             deleteBlog={deleteBlog}
           />

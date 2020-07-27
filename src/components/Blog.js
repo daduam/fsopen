@@ -17,7 +17,7 @@ const Blog = ({ blog, likeBlog, creator, deleteBlog }) => {
   const handleDelete = () => {
     deleteBlog(blog.id)
   }
-  
+
   const blogStyle = {
     padding: '10px 2px',
     border: 'solid',
