@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, likeBlog, creator, deleteBlog }) => {
   const [toggleLabel, setToggleLabel] = useState('view')
@@ -44,6 +45,13 @@ const Blog = ({ blog, likeBlog, creator, deleteBlog }) => {
       )}
     </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  likeBlog: PropTypes.func.isRequired,
+  creater: PropTypes.bool,
+  deleteBlog: PropTypes.func.isRequired
 }
 
 export default Blog
