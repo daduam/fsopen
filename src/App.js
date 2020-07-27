@@ -32,6 +32,11 @@ const App = () => {
     }
   }, [])
 
+  // sort blogs by decreasing number of likes
+  const blogsByLikes = blogs.sort((blogA, blogB) => {
+    return blogB.likes - blogA.likes
+  })
+
   const handleLogin = async (e) => {
     e.preventDefault()
 
@@ -132,7 +137,7 @@ const App = () => {
       </Togglable>
       
       <div style={{ marginTop: '1em' }}>
-        {blogs.map(blog =>
+        {blogsByLikes.map(blog =>
           <Blog
             key={blog.id}
             blog={blog}
