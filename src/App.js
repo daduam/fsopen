@@ -72,6 +72,8 @@ const App = () => {
     try {
       const savedBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(savedBlog))
+      // TODO: show remove button after create
+      // currently requires refresh
       setNotifyMessage(`a new blog ${savedBlog.title} by ${savedBlog.author} added`)
       setNotifyType('success')
       setTimeout(() => {
@@ -92,6 +94,18 @@ const App = () => {
       })
 
       setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog))
+    } catch(error) {
+      console.error(error)
+    }
+  }
+
+  const deleteBlog = async (id) => {
+    try {
+      const blog = blogs.find(blog => blog.id === id)
+      if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+        await blogService.remove(id)
+        setBlogs(blogs.filter(blog => blog.id !== id))
+      }
     } catch(error) {
       console.error(error)
     }
@@ -142,6 +156,12 @@ const App = () => {
             key={blog.id}
             blog={blog}
             likeBlog={likeBlog}
+            creator={
+              blog.user
+              ? blog.user.username === user.username
+              : false
+            }
+            deleteBlog={deleteBlog}
           />
         )}
       </div>
