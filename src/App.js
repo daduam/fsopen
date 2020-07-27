@@ -77,6 +77,21 @@ const App = () => {
     }
   }
 
+  const likeBlog = async (id) => {
+    try {
+      const newBlog = blogs.find(blog => blog.id === id)
+
+      const updatedBlog = await blogService.update(id, {
+        ...newBlog,
+        likes: newBlog.likes + 1
+      })
+
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog))
+    } catch(error) {
+      console.error(error)
+    }
+  }
+
   if (user === null) {
     return (
       <form>
@@ -118,7 +133,11 @@ const App = () => {
       
       <div style={{ marginTop: '1em' }}>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleLike={() => likeBlog(blog.id)}
+          />
         )}
       </div>
 

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleLike }) => {
   const [toggleLabel, setToggleLabel] = useState('view')
 
-  const toggleDetails = () => {
+  const handleToggleClick = () => {
     setToggleLabel(toggleLabel === 'view' ? 'hide' : 'view')
   }
   
@@ -19,14 +19,14 @@ const Blog = ({ blog }) => {
     <div style={blogStyle}>
       <div>
         {blog.title} - {blog.author}
-        <button onClick={toggleDetails}>{toggleLabel}</button>
+        <button onClick={handleToggleClick}>{toggleLabel}</button>
       </div>
       {toggleLabel === 'hide' && (
         <div>
           <div>{blog.url}</div>
           <div>
-            likes {blog.likes}
-            <button>like</button>
+            likes {blog.likes}&nbsp;
+            <button onClick={handleLike}>like</button>
           </div>
           <div>{blog.user ? blog.user.name : 'No User'}</div>
         </div>
