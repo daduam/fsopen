@@ -1,10 +1,16 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog, handleLike }) => {
+const Blog = ({ blog, likeBlog }) => {
   const [toggleLabel, setToggleLabel] = useState('view')
+  const [liked, setLiked] = useState(false)
 
   const handleToggleClick = () => {
     setToggleLabel(toggleLabel === 'view' ? 'hide' : 'view')
+  }
+
+  const handleLike = () => {
+    likeBlog(blog.id, liked)
+    setLiked(!liked)
   }
   
   const blogStyle = {
@@ -26,7 +32,7 @@ const Blog = ({ blog, handleLike }) => {
           <div>{blog.url}</div>
           <div>
             likes {blog.likes}&nbsp;
-            <button onClick={handleLike}>like</button>
+            <button onClick={handleLike}>{liked ? 'unlike' : 'like'}</button>
           </div>
           <div>{blog.user ? blog.user.name : 'No User'}</div>
         </div>
