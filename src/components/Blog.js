@@ -28,16 +28,16 @@ const Blog = ({ blog, likeBlog, creator, deleteBlog }) => {
 
   return (
     <div style={blogStyle}>
-      <div>
+      <div className="defaultDisplay">
         {blog.title} - {blog.author}
         <button onClick={handleToggleClick}>{toggleLabel}</button>
       </div>
       {toggleLabel === 'hide' && (
-        <div>
+        <div className="defaultHidden">
           <div>{blog.url}</div>
           <div>
             likes {blog.likes}&nbsp;
-            <button onClick={handleLike}>{liked ? 'unlike' : 'like'}</button>
+            <button onClick={handleLike} className="likeBtn">{liked ? 'unlike' : 'like'}</button>
           </div>
           <div>{blog.user ? blog.user.name : 'No User'}</div>
           {creator && <button onClick={handleDelete}>remove</button>}
@@ -50,7 +50,7 @@ const Blog = ({ blog, likeBlog, creator, deleteBlog }) => {
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   likeBlog: PropTypes.func.isRequired,
-  creater: PropTypes.bool,
+  creator: PropTypes.bool,
   deleteBlog: PropTypes.func.isRequired
 }
 
