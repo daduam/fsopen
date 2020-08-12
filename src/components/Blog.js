@@ -27,7 +27,7 @@ const Blog = ({ blog, likeBlog, creator, deleteBlog }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       <div className="defaultDisplay">
         {blog.title} - {blog.author}
         <button onClick={handleToggleClick}>{toggleLabel}</button>
@@ -40,7 +40,7 @@ const Blog = ({ blog, likeBlog, creator, deleteBlog }) => {
             <button onClick={handleLike} className="likeBtn">{liked ? 'unlike' : 'like'}</button>
           </div>
           <div>{blog.user ? blog.user.name : 'No User'}</div>
-          {creator && <button onClick={handleDelete}>remove</button>}
+          {creator && <button onClick={handleDelete} className="deleteBtn">remove</button>}
         </div>
       )}
     </div>
