@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import AddAnecdote from './components/AddAnecdote'
+import AnecdoteForm from './components/AnecdoteForm'
 import { voteWithId } from './reducers/anecdoteReducer'
 
 
@@ -27,7 +27,7 @@ const App = () => {
           </div>
         </div>
       )}
-      <AddAnecdote />
+      <AnecdoteForm />
     </Fragment>
   )
 }
