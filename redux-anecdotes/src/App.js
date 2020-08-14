@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react'
+import { useSelector } from 'react-redux'
 import AnecdoteForm from './components/AnecdoteForm'
 import AnecdoteList from './components/AnecdoteList'
-import { useSelector } from 'react-redux'
 import Notification  from './components/Notification'
+import Filter from './components/Filter'
 
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
     <Fragment>
       <h2>Anecdotes</h2>
       {notification === '' ? null : <Notification />}
+      <Filter />
       <AnecdoteList />
       <AnecdoteForm />
     </Fragment>
