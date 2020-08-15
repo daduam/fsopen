@@ -1,13 +1,13 @@
-const SET_NOTIF = 'SET_NOTIF'
-const REMOVE_NOTIF = 'REMOVE_NOTIF'
+const SET_NOTIF = 'SET_NOTIFICATION'
+const CLEAR_NOTIF = 'CLEAR_NOTIFICATION'
 const initialMessage = ''
 
 const notificaionReducer = (state = initialMessage, action) => {
   switch(action.type) {
     case SET_NOTIF:
-      return action.message
+      return action.data
 
-    case REMOVE_NOTIF:
+    case CLEAR_NOTIF:
       return ''
 
     default:
@@ -15,16 +15,17 @@ const notificaionReducer = (state = initialMessage, action) => {
   }
 }
 
-export const setNotification = (message) => {
-  return {
-    type: SET_NOTIF,
-    message
-  }
-}
-
-export const removeNotification = () => {
-  return  {
-    type: REMOVE_NOTIF
+export const setNotification = (message, duration) => {
+  return async (dispatch) => {
+    dispatch({
+      type: SET_NOTIF,
+      data: message
+    })
+    await setTimeout(() => {
+      dispatch({
+        type: CLEAR_NOTIF
+      })
+    }, duration * 1000);
   }
 }
 
