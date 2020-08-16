@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { voteWithId, initializeAnecdotes } from '../reducers/anecdoteReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
@@ -17,32 +17,22 @@ const Anecdote = ({ anecdote, handleVote }) => {
 }
 
 
-const AnecdoteList = () => {
-  const anecdotes = useSelector(({ anecdotes, filter }) => {
-    if (filter === '') {
-      return anecdotes.sort((a, b) => b.votes - a.votes)
-    }
-    return anecdotes.filter(anecdote => {
-      return anecdote.content.toLowerCase().includes(filter.toLowerCase())
-    })
-  })
-  const dispatch = useDispatch()
-
+const AnecdoteList = ({ initializeAnecdotes, ...props }) => {
   useEffect(() => {
-    dispatch(initializeAnecdotes())
-  }, [dispatch])
+    initializeAnecdotes()
+  }, [initializeAnecdotes])
 
   const vote = (id) => {
-    const voted = anecdotes.find(a => a.id === id)
-    dispatch(voteWithId({
+    const voted = props.anecdotes.find(a => a.id === id)
+    props.voteWithId({
       ...voted, votes: voted.votes + 1
-    }))
-    dispatch(setNotification(`you voted '${voted.content}'`, 4))
+    })
+    props.setNotification(`you voted '${voted.content}'`, 4)
   }
 
   return (
     <div>
-      {anecdotes.map(anecdote =>
+      {props.anecdotes.map(anecdote =>
         <Anecdote
           key={anecdote.id}
           anecdote={anecdote}
@@ -53,4 +43,26 @@ const AnecdoteList = () => {
   )
 }
 
-export default AnecdoteList
+const mapStateToProps = (state) => {
+  if (state.filter === '') {
+    return {
+      anecdotes: state.anecdotes.sort((a, b) => b.votes - a.votes)
+    }
+  }
+  return {
+    anecdotes: state.anecdotes.filter(anecdote => {
+      return anecdote.content.toLowerCase().includes(state.filter.toLowerCase())
+    })
+  }
+}
+
+const mapDispatchToProps = {
+  initializeAnecdotes,
+  voteWithId,
+  setNotification
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AnecdoteList)
