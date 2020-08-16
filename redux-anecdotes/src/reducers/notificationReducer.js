@@ -23,7 +23,7 @@ export const setNotification = (message, duration) => {
       type: SET_NOTIF,
       data: message
     })
-    timeoutID = await setTimeout(() => {
+    timeoutID = setTimeout(() => {
       dispatch({ type: CLEAR_NOTIF })
     }, duration * 1000);
   }
