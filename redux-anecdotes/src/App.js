@@ -12,7 +12,7 @@ const App = () => {
   return (
     <Fragment>
       <h2>Anecdotes</h2>
-      {notification === '' ? null : <Notification />}
+      {notification && <Notification />}
       <Filter />
       <AnecdoteList />
       <AnecdoteForm />

@@ -1,6 +1,7 @@
 const SET_NOTIF = 'SET_NOTIFICATION'
 const CLEAR_NOTIF = 'CLEAR_NOTIFICATION'
-const initialMessage = ''
+const initialMessage = null
+let timeoutID;
 
 const notificaionReducer = (state = initialMessage, action) => {
   switch(action.type) {
@@ -8,7 +9,7 @@ const notificaionReducer = (state = initialMessage, action) => {
       return action.data
 
     case CLEAR_NOTIF:
-      return ''
+      return null
 
     default:
       return state
@@ -16,15 +17,14 @@ const notificaionReducer = (state = initialMessage, action) => {
 }
 
 export const setNotification = (message, duration) => {
+  clearTimeout(timeoutID)
   return async (dispatch) => {
     dispatch({
       type: SET_NOTIF,
       data: message
     })
-    await setTimeout(() => {
-      dispatch({
-        type: CLEAR_NOTIF
-      })
+    timeoutID = await setTimeout(() => {
+      dispatch({ type: CLEAR_NOTIF })
     }, duration * 1000);
   }
 }
