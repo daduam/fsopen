@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { logUser } from '../reducers/authReducer'
 
-const LoginForm = ({ logUser }) => {
+const LoginForm = () => {
+  const dispatch = useDispatch()
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const handleLogin = (e) => {
     e.preventDefault()
 
-    logUser({ username, password })
+    dispatch(logUser({ username, password }))
 
     setUsername('')
     setPassword('')
