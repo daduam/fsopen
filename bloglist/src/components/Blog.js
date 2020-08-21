@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { likeBlog, deleteBlog } from '../reducers/blogReducer'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, likeBlog, creator, deleteBlog }) => {
+const Blog = ({ blog, creator }) => {
+  const dispatch = useDispatch()
+
   const [toggleLabel, setToggleLabel] = useState('view')
   const [liked, setLiked] = useState(false)
 
@@ -10,12 +14,17 @@ const Blog = ({ blog, likeBlog, creator, deleteBlog }) => {
   }
 
   const handleLike = () => {
-    likeBlog(blog.id, liked)
+    dispatch(likeBlog({
+      ...blog,
+      likes: liked ? blog.likes - 1 : blog.likes + 1
+    }))
     setLiked(!liked)
   }
 
   const handleDelete = () => {
-    deleteBlog(blog.id)
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      dispatch(deleteBlog(blog.id))
+    }
   }
 
   const blogStyle = {
@@ -49,9 +58,7 @@ const Blog = ({ blog, likeBlog, creator, deleteBlog }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  likeBlog: PropTypes.func.isRequired,
-  creator: PropTypes.bool,
-  deleteBlog: PropTypes.func.isRequired
+  creator: PropTypes.bool
 }
 
 export default Blog
