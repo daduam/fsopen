@@ -5,6 +5,7 @@ import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import { initAuth, logout } from './reducers/authReducer'
 import { useDispatch, useSelector } from 'react-redux'
+import Notify from './components/Notify'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -26,7 +27,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      {/* <Notify message={notifyMessage} type={notifyType} /> */}
+      <Notify />
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
 

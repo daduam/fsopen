@@ -1,5 +1,6 @@
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import { setNotification } from './notificationReducer'
 
 const INIT_AUTH = 'INIT_AUTH'
 const LOGIN = 'LOGIN'
@@ -23,27 +24,39 @@ const reducer = (state = null, action) => {
 
 export const initAuth = () => {
   return (dispatch) => {
-    const loggedUser = window.localStorage.getItem('loggedUser')
-    if (loggedUser) {
-      const user = JSON.parse(loggedUser)
-      blogService.setToken(user.token)
-      dispatch({ type: INIT_AUTH, data: user })
-    }
-    else {
-      dispatch({ type: INIT_AUTH, data: null })
+    try {
+      const loggedUser = window.localStorage.getItem('loggedUser')
+      if (loggedUser) {
+        const user = JSON.parse(loggedUser)
+        blogService.setToken(user.token)
+        dispatch({ type: INIT_AUTH, data: user })
+      }
+      else {
+        dispatch({ type: INIT_AUTH, data: null })
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 }
 
 export const logUser = (userCredentials) => {
   return async (dispatch) => {
-    const user = await loginService.login(userCredentials)
-    window.localStorage.setItem('loggedUser', JSON.stringify(user))
-    blogService.setToken(user.token)
-    dispatch({
-      type: LOGIN,
-      data: user
-    })
+    try {
+      const user = await loginService.login(userCredentials)
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      blogService.setToken(user.token)
+      dispatch({
+        type: LOGIN,
+        data: user
+      })
+    } catch ({ response }) {
+      dispatch(setNotification({
+        message: 'wrong username or password',
+        type: 'error',
+        durationSecs: 3
+      }))
+    }
   }
 }
 

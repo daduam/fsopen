@@ -1,6 +1,5 @@
 import blogService from '../services/blogs'
-
-// TODO: try-catch guards for code that need it
+import { setNotification } from './notificationReducer'
 
 const INIT_BLOGS = 'INIT_BLOGS'
 const NEW_BLOG = 'NEW_BLOG'
@@ -32,41 +31,59 @@ const reducer = (state = [], action) => {
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
-    const blogs = await blogService.getAll()
-    dispatch({
-      type: INIT_BLOGS,
-      data: blogs
-    })
+    try {
+      const blogs = await blogService.getAll()
+      dispatch({
+        type: INIT_BLOGS,
+        data: blogs
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 
 export const createBlog = (newBlog) => {
   return async (dispatch) => {
-    const savedBlog = await blogService.create(newBlog)
-    dispatch({
-      type: NEW_BLOG,
-      data: savedBlog
-    })
+    try {
+      const savedBlog = await blogService.create(newBlog)
+      dispatch({ type: NEW_BLOG, data: savedBlog })
+      dispatch(setNotification({
+        message: `a new blog ${savedBlog.title} by ${savedBlog.author} added`,
+        type: 'success',
+        durationSecs: 5
+      }))
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 
 export const likeBlog = (likedBlog) => {
   return async (dispatch) => {
-    const updatedBlog = await blogService.update(likedBlog.id, likedBlog)
-    dispatch({
-      type: LIKE_BLOG,
-      data: updatedBlog
-    })
+    try {
+      const updatedBlog = await blogService.update(likedBlog.id, likedBlog)
+      dispatch({
+        type: LIKE_BLOG,
+        data: updatedBlog
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 
 export const deleteBlog = (id) => {
   return async (dispatch) => {
-    await blogService.remove(id)
-    dispatch({
-      type: DELETE_BLOG,
-      data: id
-    })
+    try {
+      await blogService.remove(id)
+      dispatch({
+        type: DELETE_BLOG,
+        data: id
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 
