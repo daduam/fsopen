@@ -32,7 +32,7 @@ const Blog = ({ blog, creator }) => {
     border: 'solid',
     borderWidth: '1px',
     width: '80vw',
-    margin: '5px auto'
+    margin: 5
   }
 
   return (
