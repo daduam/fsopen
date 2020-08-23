@@ -1,16 +1,23 @@
-import React from 'react'
-import { likeBlog } from '../reducers/blogReducer'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { likeBlog } from '../reducers/blogReducer'
+import blogService from '../services/blogs'
 
 // TODO: api needs to implement fetching single resources by id
 
 const Blog = () => {
+  const [blog, setBlog] = useState(null)
+  const [comment, setComment] = useState('')
   const id = useParams().id
   const dispatch = useDispatch()
-  const blog = useSelector(state => {
-    return state.blogs.find(b => b.id === id)
-  })
+
+  useEffect(() => {
+    (async () => {
+      const blog = await blogService.getById(id)
+      setBlog(blog)
+    })()
+  }, [id])
 
   const handleLike = () => {
     const likedBlog = {
@@ -18,6 +25,17 @@ const Blog = () => {
       likes: blog.likes + 1
     }
     dispatch(likeBlog(likedBlog))
+  }
+
+  const addComment = async (e) => {
+    e.preventDefault()
+    try {
+      const updatedBlog = await blogService.addComment(blog.id, { comment })
+      setComment('')
+      setBlog(updatedBlog)
+    } catch(error) {
+      console.error(error)
+    }
   }
 
   if (!blog) {
@@ -38,11 +56,14 @@ const Blog = () => {
 
       <div>
         <h3>comments</h3>
+        <form onSubmit={addComment}>
+          <input value={comment} onChange={({ target }) => setComment(target.value)} />
+          <button type="submit">add comment</button>
+        </form>
         <ul>
           {
-            blog.comments &&
-            blog.comments.map(comment => {
-              return <li key="1">{comment}</li>
+            blog.comments.map((comment, idx) => {
+              return <li key={idx}>{comment}</li>
             })
           }
         </ul>

@@ -35,10 +35,22 @@ const remove = async (id) => {
   return data
 }
 
+const getById = async (id) => {
+  const { data } = await axios.get(`${baseUrl}/${id}`)
+  return data
+}
+
+const addComment = async (id, comment) => {
+  const { data } = await axios.post(`${baseUrl}/${id}/comments`, comment)
+  return data
+}
+
 export default {
   setToken,
   getAll,
   create,
   update,
-  remove
+  remove,
+  getById,
+  addComment
 }
