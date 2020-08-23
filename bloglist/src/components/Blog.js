@@ -35,6 +35,18 @@ const Blog = () => {
         </div>
         <div>added by {blog.user.name}</div>
       </div>
+
+      <div>
+        <h3>comments</h3>
+        <ul>
+          {
+            blog.comments &&
+            blog.comments.map(comment => {
+              return <li key="1">{comment}</li>
+            })
+          }
+        </ul>
+      </div>
     </div>
   )
 }

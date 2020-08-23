@@ -24,6 +24,15 @@ blogsRouter.post('/', async (req, res) => {
   res.status(201).json(savedBlog)
 })
 
+blogsRouter.get('/:id', async (req, res) => {
+  const blog = await Blog.findById(req.params.id).populate('user', { blogs: 0 })
+
+  if (blog) {
+    return res.json(blog.toJSON())
+  }
+  res.status(404).json({ error: 'requested resource not found' })
+})
+
 blogsRouter.delete('/:id', async (req, res) => {
   const decodedToken = jwt.verify(req.token, process.env.SECRET)
   if (!req.token || !decodedToken.id) {
