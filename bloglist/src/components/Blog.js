@@ -1,64 +1,42 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { likeBlog, deleteBlog } from '../reducers/blogReducer'
-import { useDispatch } from 'react-redux'
+import React from 'react'
+import { likeBlog } from '../reducers/blogReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
-const Blog = ({ blog, creator }) => {
+// TODO: api needs to implement fetching single resources by id
+
+const Blog = () => {
+  const id = useParams().id
   const dispatch = useDispatch()
-
-  const [toggleLabel, setToggleLabel] = useState('view')
-  const [liked, setLiked] = useState(false)
-
-  const handleToggleClick = () => {
-    setToggleLabel(toggleLabel === 'view' ? 'hide' : 'view')
-  }
+  const blog = useSelector(state => {
+    return state.blogs.find(b => b.id === id)
+  })
 
   const handleLike = () => {
-    dispatch(likeBlog({
+    const likedBlog = {
       ...blog,
-      likes: liked ? blog.likes - 1 : blog.likes + 1
-    }))
-    setLiked(!liked)
-  }
-
-  const handleDelete = () => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      dispatch(deleteBlog(blog.id))
+      likes: blog.likes + 1
     }
+    dispatch(likeBlog(likedBlog))
   }
 
-  const blogStyle = {
-    padding: '10px 2px',
-    border: 'solid',
-    borderWidth: '1px',
-    width: '80vw',
-    margin: 5
+  if (!blog) {
+    return null
   }
 
   return (
-    <div style={blogStyle} className="blog">
-      <div className="defaultDisplay">
-        {blog.title} - {blog.author}
-        <button onClick={handleToggleClick}>{toggleLabel}</button>
-      </div>
-      {toggleLabel === 'hide' && (
-        <div className="defaultHidden">
-          <div>{blog.url}</div>
-          <div>
-            likes {blog.likes}&nbsp;
-            <button onClick={handleLike} className="likeBtn">{liked ? 'unlike' : 'like'}</button>
-          </div>
-          <div>{blog.user ? blog.user.name : 'No User'}</div>
-          {creator && <button onClick={handleDelete} className="deleteBtn">remove</button>}
+    <div>
+      <h1>{blog.title}</h1>
+      <div>
+        <div><a href={blog.url}>{blog.url}</a></div>
+        <div>
+          {blog.likes} likes
+          <button onClick={handleLike}>like</button>
         </div>
-      )}
+        <div>added by {blog.user.name}</div>
+      </div>
     </div>
   )
-}
-
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  creator: PropTypes.bool
 }
 
 export default Blog

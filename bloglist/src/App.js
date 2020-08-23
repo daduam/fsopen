@@ -1,17 +1,20 @@
 import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   Switch,
   Route,
 } from 'react-router-dom'
+
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
-import { initAuth, logout } from './reducers/authReducer'
-import { useDispatch, useSelector } from 'react-redux'
 import Notify from './components/Notify'
 import Users from './components/Users'
 import User from './components/User'
+import Blog from './components/Blog'
+
+import { initAuth, logout } from './reducers/authReducer'
 import { allUsers } from './reducers/usersReducer'
 
 const App = () => {
@@ -41,6 +44,9 @@ const App = () => {
       <button onClick={handleLogout}>logout</button>
 
       <Switch>
+        <Route path="/blogs/:id">
+          <Blog />
+        </Route>
         <Route path="/users/:id">
           <User />
         </Route>
