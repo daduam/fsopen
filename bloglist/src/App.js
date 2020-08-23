@@ -9,12 +9,12 @@ import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
-import Notify from './components/Notify'
 import Users from './components/Users'
 import User from './components/User'
 import Blog from './components/Blog'
+import Menu from './components/Menu'
 
-import { initAuth, logout } from './reducers/authReducer'
+import { initAuth } from './reducers/authReducer'
 import { allUsers } from './reducers/usersReducer'
 
 const App = () => {
@@ -27,21 +27,13 @@ const App = () => {
     dispatch(allUsers())
   }, [dispatch])
 
-  const handleLogout = (e) => {
-    e.preventDefault()
-    dispatch(logout())
-  }
-
   if (auth === null) {
     return (<LoginForm />)
   }
 
   return (
     <div>
-      <h2>blogs</h2>
-      <Notify />
-      <p>{auth.name} logged in</p>
-      <button onClick={handleLogout}>logout</button>
+      <Menu />
 
       <Switch>
         <Route path="/blogs/:id">

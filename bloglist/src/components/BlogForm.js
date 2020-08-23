@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
+import Notify from './Notify'
 
 const BlogForm = () => {
   const dispatch = useDispatch()
@@ -21,6 +22,7 @@ const BlogForm = () => {
 
   return (
     <form onSubmit={handleCreateBlog}>
+      <Notify />
       <h2>create new</h2>
       <div>
         <label htmlFor="title">title</label>
