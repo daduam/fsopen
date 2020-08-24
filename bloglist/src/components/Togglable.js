@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { Box, Button } from '@chakra-ui/core'
 
 const Togglable = (props) => {
   const [visible, setVisible] = useState(false)
@@ -7,20 +8,32 @@ const Togglable = (props) => {
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
 
-  const toggleVisibility = () => {
-    setVisible(!visible)
-  }
+  const toggleVisibility = () => setVisible(!visible)
 
   return (
-    <div>
+    <Box p={5}>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+        <Button
+          onClick={toggleVisibility}
+          variantColor="teal"
+        >
+          {props.buttonLabel}
+        </Button>
       </div>
-      <div style={showWhenVisible}>
+
+      <Box style={showWhenVisible}>
+        <Button
+          onClick={toggleVisibility}
+          variantColor="red"
+          variant="outline"
+          mb={2}
+        >
+          cancel
+        </Button>
+
         {props.children}
-        <button onClick={toggleVisibility}>cancel</button>
-      </div>
-    </div>
+      </Box>
+    </Box>
   )
 }
 

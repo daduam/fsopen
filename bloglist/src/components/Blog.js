@@ -4,8 +4,6 @@ import { useParams } from 'react-router-dom'
 import { likeBlog } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
 
-// TODO: api needs to implement fetching single resources by id
-
 const Blog = () => {
   const [blog, setBlog] = useState(null)
   const [comment, setComment] = useState('')

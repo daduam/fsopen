@@ -46,7 +46,7 @@ const App = () => {
           <Users />
         </Route>
         <Route path="/">
-          <Togglable buttonLabel='new blog'>
+          <Togglable buttonLabel='create new'>
             <BlogForm />
           </Togglable>
 
