@@ -18,6 +18,7 @@ export const FETCH_BOOKS = gql`
       author {
         name
       }
+      genres
       published
       id
     }
