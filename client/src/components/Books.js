@@ -51,7 +51,7 @@ const Books = (props) => {
           )}
         </tbody>
       </table>
-      
+
       <div>
         {
           genres.map(g => (

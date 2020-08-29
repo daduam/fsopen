@@ -1,12 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
+import Recommend from './components/Recommend'
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
+
+  useEffect(() => {
+    setToken(localStorage.getItem('graphql-library-user'))
+  }, [])
 
   const logout = () => {
     setToken(null)
@@ -23,6 +28,7 @@ const App = () => {
           ? (<button onClick={() => setPage('login')}>login</button>)
           : (<>
             <button onClick={() => setPage('add')}>add book</button>
+            <button onClick={() => setPage('recommend')}>recommend</button>
             <button onClick={logout}>logout</button>
           </>)}
       </div>
@@ -44,6 +50,10 @@ const App = () => {
         show={page === 'login'}
         setToken={setToken}
         setPage={setPage}
+      />
+
+      <Recommend
+        show={page === 'recommend'}
       />
 
     </div>
