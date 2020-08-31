@@ -16,7 +16,7 @@ mongoose.set('useFindAndModify', true)
 
 mongoose
   .connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('🚀 Connected to MongoDB'))
+  .then(() => console.log('🚀 Connected to MongoDB'))
   .catch(error => console.error('Error connecting to MongoDB', error.message))
 
 const pubsub = new PubSub()
@@ -113,7 +113,9 @@ const resolvers = {
 
       try {
         if (!author) {
-          book.author = (await (new Author({ name: args.author })).save()).id
+          const newAuthor = new Author({ name: args.author });
+          const savedAuthor = await newAuthor.save()
+          book.author = savedAuthor._id
         }
         await book.save()
       } catch (error) {
@@ -122,9 +124,11 @@ const resolvers = {
         })
       }
 
-      pubsub.publish('BOOK_ADDED', { bookAdded: book })
+      const savedBook = await Book.findById(book._id).populate('author')
 
-      return book
+      pubsub.publish('BOOK_ADDED', { bookAdded: savedBook })
+
+      return savedBook
     },
     editAuthor: async (parent, args, context) => {
       if (!context.currentUser) {
