@@ -108,15 +108,15 @@ const resolvers = {
         throw new AuthenticationError('not authenticated')
       }
 
-      const author = await Author.findOne({ name: args.author })
+      let author = await Author.findOne({ name: args.author })
       const book = new Book({ ...args, author: author ? author.id : '' })
 
       try {
         if (!author) {
-          const newAuthor = new Author({ name: args.author });
-          const savedAuthor = await newAuthor.save()
-          book.author = savedAuthor._id
+          author = new Author({ name: args.author });
+          await author.save()
         }
+        book.author = author
         await book.save()
       } catch (error) {
         throw new UserInputError(error.message, {
@@ -124,11 +124,9 @@ const resolvers = {
         })
       }
 
-      const savedBook = await Book.findById(book._id).populate('author')
+      pubsub.publish('BOOK_ADDED', { bookAdded: book })
 
-      pubsub.publish('BOOK_ADDED', { bookAdded: savedBook })
-
-      return savedBook
+      return book
     },
     editAuthor: async (parent, args, context) => {
       if (!context.currentUser) {
