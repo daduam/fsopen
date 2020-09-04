@@ -1,5 +1,17 @@
+const args = process.argv;
+
+if (args.length < 4) {
+  throw new Error("too few arguments: expects two args, height(cm) and weight(kg)")
+} else if (args.length > 4) {
+  throw new Error("too many arguments: expects two args, height(cm) and weight(kg)")
+} else if (isNaN(Number(args[2]))) {
+  throw new Error(`height ${args[2]} must be a number`)
+} else if (isNaN(Number(args[3]))) {
+  throw new Error(`weight ${args[3]} must be a number`)
+}
+
 const calculateBmi = (height: number, weight: number): string => {
-  const bmi = weight / ((height/100) ** 2);
+  const bmi = weight / ((height / 100) ** 2);
 
   if (bmi < 15) {
     return "Very severely underweight";
@@ -20,4 +32,4 @@ const calculateBmi = (height: number, weight: number): string => {
   }
 }
 
-console.log(calculateBmi(180, 74));
+console.log(calculateBmi(Number(args[2]), Number(args[3])));

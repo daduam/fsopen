@@ -1,3 +1,20 @@
+const [, , target, ...hours] = process.argv;
+let dailyHours: Array<number> = [];
+
+if (!target || hours.length === 0) {
+  throw new Error("too few arguments: expects at least 2 numbers, target and exercise hour(s)");
+} else {
+  if (isNaN(Number(target))) {
+    throw new Error("bad argument type: args should be numbers");
+  }
+  dailyHours = hours.map(h => {
+    if (isNaN(Number(h))) {
+      throw new Error("bad argument type: hours should be numbers");
+    }
+    return Number(h);
+  });
+}
+
 interface ExerciseBreakdown {
   periodLength: number;
   trainingDays: number;
@@ -13,7 +30,7 @@ const calculateExercises = (dailyHours: Array<number>, target: number): Exercise
   const totalHours = dailyHours.reduce((tot, h) => tot + h);
   const average = totalHours / periodLength;
 
-  let rating: number =  1;
+  let rating: number = 1;
   let ratingDescription = "Not good at all, my paddy";
   if (average >= target) {
     rating = 3;
@@ -35,4 +52,4 @@ const calculateExercises = (dailyHours: Array<number>, target: number): Exercise
   }
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+console.log(calculateExercises(dailyHours, Number(target)));
