@@ -1,16 +1,16 @@
-const args = process.argv;
-
-if (args.length < 4) {
-  throw new Error("too few arguments: expects two args, height(cm) and weight(kg)")
-} else if (args.length > 4) {
-  throw new Error("too many arguments: expects two args, height(cm) and weight(kg)")
-} else if (isNaN(Number(args[2]))) {
-  throw new Error(`height ${args[2]} must be a number`)
-} else if (isNaN(Number(args[3]))) {
-  throw new Error(`weight ${args[3]} must be a number`)
+export const parseArguments = (args: Array<string>) => {
+  if (args.length < 4) {
+    throw new Error("too few arguments: expects two args, height(cm) and weight(kg)")
+  } else if (args.length > 4) {
+    throw new Error("too many arguments: expects two args, height(cm) and weight(kg)")
+  } else if (isNaN(Number(args[2]))) {
+    throw new Error(`height ${args[2]} must be a number`)
+  } else if (isNaN(Number(args[3]))) {
+    throw new Error(`weight ${args[3]} must be a number`)
+  }
 }
 
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   const bmi = weight / ((height / 100) ** 2);
 
   if (bmi < 15) {
@@ -31,5 +31,3 @@ const calculateBmi = (height: number, weight: number): string => {
     return "Obese Class III (Very severely obese)";
   }
 }
-
-console.log(calculateBmi(Number(args[2]), Number(args[3])));
