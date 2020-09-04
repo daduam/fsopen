@@ -30,7 +30,7 @@ const calculateExercises = (dailyHours: Array<number>, target: number): Exercise
   const totalHours = dailyHours.reduce((tot, h) => tot + h);
   const average = totalHours / periodLength;
 
-  let rating: number = 1;
+  let rating = 1;
   let ratingDescription = "Not good at all, my paddy";
   if (average >= target) {
     rating = 3;
@@ -49,7 +49,7 @@ const calculateExercises = (dailyHours: Array<number>, target: number): Exercise
     ratingDescription,
     target,
     average
-  }
-}
+  };
+};
 
 console.log(calculateExercises(dailyHours, Number(target)));
