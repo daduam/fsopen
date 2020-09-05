@@ -1,6 +1,8 @@
-import express from "express";
-import patientsService from "../services/patientService";
-import patientService from "../services/patientService";
+import express from 'express';
+
+import patientsService from '../services/patientService';
+import toNewPatientEntry from '../utils';
+import patientService from '../services/patientService';
 
 const router = express.Router();
 
@@ -9,25 +11,14 @@ router.get("/", (_, res) => {
 });
 
 router.post("/", (req, res) => {
-  console.log(req.body);
-  const { name, ssn, dateOfBirth, occupation, gender } = req.body;
-
-  // try {
-  //   const newPatient = patientsService.addPatient(req.body);
-
-  //   res.send(newPatient);
-  // } catch (e) {
-  //   console.log(e.message);
-  // }
-  const newPatient = patientService.addPatient(
-    name,
-    ssn,
-    dateOfBirth,
-    occupation,
-    gender
-  );
-
-  res.json(newPatient);
+  try {
+    const newPatient = toNewPatientEntry(req.body);
+    const addedPatient = patientService.addPatient(newPatient);
+    res.json(addedPatient);
+  } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    res.status(400).send(e.message);
+  }
 });
 
 export default router;

@@ -1,6 +1,6 @@
 import patientData from '../../data/patients';
 import { v1 as uuidv1 } from "uuid";
-import { PatientNoSsn, Patient } from '../types';
+import { PatientNoSsn, Patient, NewPatientEntry } from '../types';
 
 const getAll = (): PatientNoSsn[] => {
   return patientData.map(({ id, dateOfBirth, gender, name, occupation }) => ({
@@ -12,21 +12,11 @@ const getAll = (): PatientNoSsn[] => {
   }));
 };
 
-const addPatient = (
-  name: string,
-  ssn: string,
-  dateOfBirth: string,
-  occupation: string,
-  gender: string
-): Patient => {
+const addPatient = (entry: NewPatientEntry): Patient => {
 
   const newPatient: Patient = {
     id: uuidv1(),
-    name,
-    ssn,
-    dateOfBirth,
-    occupation,
-    gender
+    ...entry
   };
 
   patientData.push(newPatient);
