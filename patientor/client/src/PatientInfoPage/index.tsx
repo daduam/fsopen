@@ -1,14 +1,16 @@
-import React from "react";
-import { Header, Icon } from "semantic-ui-react";
-import { useParams } from "react-router-dom";
-import { useStateValue, setPatient } from "../state";
-import axios from "axios";
-import { Patient } from "../types";
-import { apiBaseUrl } from "../constants";
+import axios from 'axios';
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import { Header, Icon } from 'semantic-ui-react';
+
+import EntryDetails from '../components/EntryDetails';
+import { apiBaseUrl } from '../constants';
+import { setPatient, useStateValue } from '../state';
+import { Patient } from '../types';
 
 const PatientInfoPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ patient, diagnoses }, dispatch] = useStateValue();
+  const [{ patient }, dispatch] = useStateValue();
 
   React.useEffect(() => {
     if (patient && patient.id === id) {
@@ -26,7 +28,7 @@ const PatientInfoPage: React.FC = () => {
       }
     };
     fetchPatient();
-  // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [id, dispatch]);
 
   if (!patient) {
@@ -48,15 +50,17 @@ const PatientInfoPage: React.FC = () => {
       <div>ssn: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
       <Header as="h3">entries</Header>
-      {patient.entries.map(entry => (
-        <div key={entry.id}>
-          <p>{entry.date} {entry.description}</p>
-          <ul>
-            {entry.diagnosisCodes?.map(code => (
-              <li key={code}>{code} {diagnoses[code].name}</li>
-            ))}
-          </ul>
+      {!patient.entries.length && (
+        <div>
+          <Icon name="warning sign" color="red" />{" "}
+          No entries at the moment
         </div>
+      )}
+      {patient.entries.map(entry => (
+        <EntryDetails
+          key={entry.id}
+          entry={entry}
+        />
       ))}
     </div>
   );
