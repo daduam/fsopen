@@ -8,7 +8,7 @@ import { apiBaseUrl } from "../constants";
 
 const PatientInfoPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ patient }, dispatch] = useStateValue();
+  const [{ patient, diagnoses }, dispatch] = useStateValue();
 
   React.useEffect(() => {
     if (patient && patient.id === id) {
@@ -52,7 +52,9 @@ const PatientInfoPage: React.FC = () => {
         <div key={entry.id}>
           <p>{entry.date} {entry.description}</p>
           <ul>
-            {entry.diagnosisCodes?.map(code => <li key={code}>{code}</li>)}
+            {entry.diagnosisCodes?.map(code => (
+              <li key={code}>{code} {diagnoses[code].name}</li>
+            ))}
           </ul>
         </div>
       ))}
