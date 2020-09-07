@@ -1,7 +1,7 @@
 import React from "react";
 import { Header, Icon } from "semantic-ui-react";
 import { useParams } from "react-router-dom";
-import { useStateValue } from "../state";
+import { useStateValue, setPatient } from "../state";
 import axios from "axios";
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
@@ -22,7 +22,7 @@ const PatientInfoPage: React.FC = () => {
         const { data: patientById } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
-        dispatch({ type: "SET_PATIENT", payload: patientById });
+        dispatch(setPatient(patientById));
       } catch (e) {
         console.error(e);
       }
