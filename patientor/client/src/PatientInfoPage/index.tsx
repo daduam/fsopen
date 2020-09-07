@@ -17,8 +17,6 @@ const PatientInfoPage: React.FC = () => {
 
     const fetchPatient = async () => {
       try {
-        console.log("fetching");
-        
         const { data: patientById } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
@@ -47,9 +45,17 @@ const PatientInfoPage: React.FC = () => {
               : "other gender"}
         />
       </Header>
-
       <div>ssn: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
+      <Header as="h3">entries</Header>
+      {patient.entries.map(entry => (
+        <div key={entry.id}>
+          <p>{entry.date} {entry.description}</p>
+          <ul>
+            {entry.diagnosisCodes?.map(code => <li key={code}>{code}</li>)}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 };
