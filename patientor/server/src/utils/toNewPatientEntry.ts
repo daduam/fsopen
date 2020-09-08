@@ -1,18 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NewPatientEntry, Gender } from './types';
-
-const isString = (text: any): text is string => {
-  return typeof text === "string" || text instanceof String;
-};
-
-const isDate = (date: string): boolean => {
-  return Boolean(Date.parse(date));
-};
-
-const isGender = (param: any): param is Gender => {
-  return Object.values(Gender).includes(param);
-};
+import { Gender, NewPatientEntry } from '../types';
+import { isString, isDate, isGender } from './typeGuards';
 
 const parseName = (name: any): string => {
   if (!name || !isString(name)) {
@@ -54,7 +42,9 @@ const parseGender = (gender: any): Gender => {
   return gender;
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const toNewPatientEntry = (object: any): NewPatientEntry => {
+  /* eslint-disable @typescript-eslint/no-unsafe-member-access */
   const newEntry: NewPatientEntry = {
     name: parseName(object.name),
     dateOfBirth: parseDateOfBirth(object.dateOfBirth),
