@@ -17,7 +17,7 @@ router.post("/", (req, res) => {
     res.json(addedPatient);
   } catch (e) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    res.status(400).send(e.message);
+    res.status(400).send({ error: e.message });
   }
 });
 
