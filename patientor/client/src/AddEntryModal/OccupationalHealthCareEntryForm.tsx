@@ -1,19 +1,17 @@
 import { Field, Form, Formik } from 'formik';
 import React from 'react';
-import { Button, Grid } from 'semantic-ui-react';
+import { Button, Grid, Header, Segment } from 'semantic-ui-react';
 
-import { DiagnosisSelection, TextField, NumberField } from '../AddPatientModal/FormField';
+import { DiagnosisSelection, TextField } from '../AddPatientModal/FormField';
 import { useStateValue } from '../state';
-import { Entry, HealthCheckRating, HealthCheckEntry } from '../types';
-
-export type EntryFormValues = Omit<Entry, "id">;
+import { OccupationalHealthCareEntry } from '../types';
 
 interface Props {
-  onSubmit: (values: EntryFormValues) => void;
+  onSubmit: (values: Omit<OccupationalHealthCareEntry, "id">) => void;
   onCancel: () => void;
 }
 
-const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
+const OccupationalHealthCareEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   const [{ diagnoses }] = useStateValue();
 
   return (
@@ -23,9 +21,10 @@ const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         specialist: "",
         description: "",
         diagnosisCodes: [],
-        type: "HealthCheck",
-        healthCheckRating: HealthCheckRating.CriticalRisk
-      } as Omit<HealthCheckEntry, "id">}
+        type: "OccupationalHealthcare",
+        employerName: "",
+        sickLeave: undefined
+      } as Omit<OccupationalHealthCareEntry, "id">}
       onSubmit={onSubmit}
       validate={values => {
         const requiredError = "Field is required";
@@ -39,8 +38,8 @@ const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         if (!values.description) {
           errors.description = requiredError;
         }
-        if (!values.healthCheckRating) {
-          errors.healthCheckRating = requiredError;
+        if (!values.employerName) {
+          errors.employerName = requiredError;
         }
         return errors;
       }}
@@ -72,12 +71,28 @@ const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               setFieldTouched={setFieldTouched}
             />
             <Field
-              label="healthCheckRating"
-              name="healthCheckRating"
-              component={NumberField}
-              min={0}
-              max={3}
+              label="Employer Name"
+              placeholder="employer name"
+              name="employerName"
+              component={TextField}
             />
+            <Segment>
+              <Header>
+                Sick Leave (if any)
+              </Header>
+              <Field
+                label="Start Date"
+                placeholder="YYYY-MM-DD"
+                name="sickLeave.startDate"
+                component={TextField}
+              />
+              <Field
+                label="End Date"
+                placeholder="YYYY-MM-DD"
+                name="sickLeave.endDate"
+                component={TextField}
+              />
+            </Segment>
             <Grid>
               <Grid.Column floated="left" width={5}>
                 <Button type="button" onClick={onCancel} color="red">
@@ -102,4 +117,4 @@ const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   );
 };
 
-export default AddEntryForm;
+export default OccupationalHealthCareEntryForm;

@@ -4,7 +4,7 @@ import { Button, Grid, Header, Segment } from 'semantic-ui-react';
 
 import { DiagnosisSelection, TextField } from '../AddPatientModal/FormField';
 import { useStateValue } from '../state';
-import { HospitalEntry, Discharge } from '../types';
+import { HospitalEntry } from '../types';
 
 interface Props {
   onSubmit: (values: Omit<HospitalEntry, "id">) => void;
@@ -30,7 +30,7 @@ const HospitalEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
       onSubmit={onSubmit}
       validate={values => {
         const requiredError = "Field is required";
-        const errors: { [field: string]: string | Discharge } = {};
+        const errors: { [field: string]: string } = {};
         if (!values.date) {
           errors.date = requiredError;
         }
