@@ -7,8 +7,8 @@ import AddEntryModal from '../AddEntryModal';
 import { EntryFormValues } from '../AddEntryModal/AddEntryForm';
 import EntryDetails from '../components/EntryDetails';
 import { apiBaseUrl } from '../constants';
-import { setPatient, useStateValue } from '../state';
-import { Patient } from '../types';
+import { addEntry, setPatient, useStateValue } from '../state';
+import { Entry, Patient } from '../types';
 
 const PatientInfoPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -45,11 +45,11 @@ const PatientInfoPage: React.FC = () => {
 
   const submitNewEntry = async (values: EntryFormValues) => {
     try {
-      const { data: updatedPatient } = await axios.post<Patient>(
+      const { data: newEntry } = await axios.post<Entry>(
         `${apiBaseUrl}/patients/${id}/entries`,
         values
       );
-      dispatch(setPatient(updatedPatient));
+      dispatch(addEntry(newEntry));
       closeModal();
     } catch(e) {
       setError(e.response.data.error);

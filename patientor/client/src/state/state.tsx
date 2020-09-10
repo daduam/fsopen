@@ -11,6 +11,7 @@ export type State = {
 
 const initialState: State = {
   patients: {},
+  patient: undefined,
   diagnoses: {}
 };
 
