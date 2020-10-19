@@ -1,38 +1,30 @@
-import React from 'react';
-import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import Constants from "expo-constants";
+import React from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Link } from "react-router-native";
 
 import theme from "../theme";
-import Text from "./Text";
+import AppBarTab from "./AppBarTab";
 
 const styles = StyleSheet.create({
   container: {
     paddingTop: Constants.statusBarHeight,
     backgroundColor: theme.colors.appBar,
   },
-  tab: {
-    margin: 16,
-    marginTop: 20
-  },
-  text: {
-    color: "white"
-  }
 });
 
 const AppBar = () => {
   return (
     <View style={styles.container}>
-      <View style={styles.tab}>
-        <TouchableWithoutFeedback >
-          <Text
-            fontSize="subheading"
-            fontWeight="bold"
-            style={styles.text}
-          >
-            Repositories
-          </Text>
-        </TouchableWithoutFeedback>
-      </View>
+      <ScrollView horizontal>
+        <Link to="/">
+          <AppBarTab>Repositories</AppBarTab>
+        </Link>
+
+        <Link to="/sign-in">
+          <AppBarTab>Sign in</AppBarTab>
+        </Link>
+      </ScrollView>
     </View>
   );
 };
