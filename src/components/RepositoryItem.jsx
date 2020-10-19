@@ -62,7 +62,13 @@ const RepositoryItem = ({ item }) => {
         />
 
         <View style={styles.flexColumn}>
-          <Text fontWeight="bold" style={styles.colMargin}>{item.fullName}</Text>
+          <Text
+            fontWeight="bold"
+            fontSize="subheading"
+            style={styles.colMargin}
+          >
+            {item.fullName}
+          </Text>
           <Text style={styles.colMargin}>{item.description}</Text>
           <View style={[styles.flexRow, styles.colMargin]}>
             <Text style={styles.blueTag}>{item.language}</Text>
