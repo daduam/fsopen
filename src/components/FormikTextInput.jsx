@@ -40,7 +40,7 @@ const FormikTextInput = ({ name, ...props }) => {
         onBlur={() => helpers.setTouched(true)}
         value={field.value}
         error={hasError}
-        style={[styles.textInput, meta.error && styles.errorInput]}
+        style={[styles.textInput, hasError && styles.errorInput]}
         {...props}
       />
       {hasError && <Text style={styles.errorText}>{meta.error}</Text>}
