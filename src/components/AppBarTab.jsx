@@ -12,10 +12,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppBarTab = ({ children }) => {
+const AppBarTab = ({ children, onPress }) => {
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={onPress}>
         <Text fontSize="subheading" fontWeight="bold" style={styles.text}>
           {children}
         </Text>
