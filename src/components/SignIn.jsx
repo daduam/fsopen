@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import * as yup from "yup";
 
+import useSignIn from "../hooks/useSignIn";
 import theme from "../theme";
 import FormikTextInput from "./FormikTextInput";
 import Text from "./Text";
@@ -29,10 +30,23 @@ const validationSchema = yup.object().shape({
 });
 
 const SignIn = () => {
+  const [signIn] = useSignIn();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const { data } = await signIn({ username, password });
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Formik
       initialValues={{ username: "", password: "" }}
-      onSubmit={(values) => console.log(values)}
+      onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
       {({ handleSubmit }) => (
