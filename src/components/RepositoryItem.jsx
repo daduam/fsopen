@@ -22,11 +22,9 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   flexRow: {
-    flex: 1,
     flexDirection: "row",
   },
   flexColumn: {
-    flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
   },
