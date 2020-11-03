@@ -24,3 +24,13 @@ export const AUTHORIZED_USER_QUERY = gql`
 
   ${AUTH_USER_FRAGMENT}
 `;
+
+export const REPOSITORY_QUERY = gql`
+  query Repository($id: ID!) {
+    repository(id: $id) {
+      ...RegularRepository
+    }
+  }
+
+  ${REGULAR_REPOSITORY_FRAGMENT}
+`;
