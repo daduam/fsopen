@@ -1,5 +1,11 @@
 import React from "react";
-import { Image, StyleSheet, View } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import * as WebBrowser from "expo-web-browser";
 
 import theme from "../theme";
 import Text from "./Text";
@@ -7,13 +13,13 @@ import Text from "./Text";
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   avatar: {
     width: 50,
     height: 50,
     borderRadius: 5,
-    marginRight: 16 
+    marginRight: 16,
   },
   flexRow: {
     flex: 1,
@@ -22,17 +28,17 @@ const styles = StyleSheet.create({
   flexColumn: {
     flex: 1,
     flexDirection: "column",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   statsContainer: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 4
+    marginTop: 4,
   },
   statsItem: {
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
   },
   blueTag: {
     color: "#fff",
@@ -42,13 +48,23 @@ const styles = StyleSheet.create({
   },
   colMargin: {
     marginVertical: 4,
-  }
+  },
+  btn: {
+    backgroundColor: theme.colors.primary,
+    borderRadius: 5,
+    marginTop: 8,
+  },
+  btnTitle: {
+    color: "white",
+    textAlign: "center",
+    margin: 16,
+  },
 });
 
-const RepositoryItem = ({ item }) => {
+const RepositoryItem = ({ item, ghUrl }) => {
   const prettyCount = (count) => {
     if (count >= 1000) {
-      return `${(count/1000).toFixed(1)}k`;
+      return `${(count / 1000).toFixed(1)}k`;
     }
     return count;
   };
@@ -56,10 +72,7 @@ const RepositoryItem = ({ item }) => {
   return (
     <View style={styles.container}>
       <View style={styles.flexRow}>
-        <Image
-          style={styles.avatar}
-          source={{uri: item.ownerAvatarUrl}}
-        />
+        <Image style={styles.avatar} source={{ uri: item.ownerAvatarUrl }} />
 
         <View style={styles.flexColumn}>
           <Text
@@ -97,6 +110,24 @@ const RepositoryItem = ({ item }) => {
           <Text>Rating</Text>
         </View>
       </View>
+
+      {ghUrl && (
+        <TouchableWithoutFeedback
+          onPress={
+            item.url ? () => WebBrowser.openBrowserAsync(item.url) : undefined
+          }
+        >
+          <View style={styles.btn}>
+            <Text
+              fontSize="subheading"
+              fontWeight="bold"
+              style={styles.btnTitle}
+            >
+              Open in Github
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+      )}
     </View>
   );
 };
