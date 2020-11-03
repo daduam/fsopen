@@ -1,30 +1,26 @@
 import { gql } from "@apollo/react-hooks";
+import { AUTH_USER_FRAGMENT, REGULAR_REPOSITORY_FRAGMENT } from "./fragments";
 
 export const REPOSITORIES_QUERY = gql`
   query {
     repositories {
       edges {
         node {
-          id
-          ownerAvatarUrl
-          fullName
-          description
-          language
-          stargazersCount
-          forksCount
-          reviewCount
-          ratingAverage
+          ...RegularRepository
         }
       }
     }
   }
+
+  ${REGULAR_REPOSITORY_FRAGMENT}
 `;
 
 export const AUTHORIZED_USER_QUERY = gql`
   {
     authorizedUser {
-      id
-      username
+      ...AuthorizedUser
     }
   }
+
+  ${AUTH_USER_FRAGMENT}
 `;
