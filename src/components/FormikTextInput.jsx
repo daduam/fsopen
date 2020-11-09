@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const FormikTextInput = ({ name, ...props }) => {
+const FormikTextInput = ({ name, style, ...props }) => {
   const [field, meta, helpers] = useField(name);
   const hasError = meta.touched && meta.error;
 
@@ -40,7 +40,7 @@ const FormikTextInput = ({ name, ...props }) => {
         onBlur={() => helpers.setTouched(true)}
         value={field.value}
         error={hasError}
-        style={[styles.textInput, hasError && styles.errorInput]}
+        style={[styles.textInput, hasError && styles.errorInput, style]}
         {...props}
       />
       {hasError && <Text style={styles.errorText}>{meta.error}</Text>}
