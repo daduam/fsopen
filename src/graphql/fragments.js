@@ -21,3 +21,16 @@ export const AUTH_USER_FRAGMENT = gql`
     username
   }
 `;
+
+export const REVIEW_FRAGMENT = gql`
+  fragment RegularReview on Review {
+    id
+    text
+    rating
+    createdAt
+    user {
+      id
+      username
+    }
+  }
+`;
