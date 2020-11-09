@@ -2,7 +2,7 @@ import { useApolloClient, useQuery } from "@apollo/react-hooks";
 import Constants from "expo-constants";
 import React, { useContext } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Link } from "react-router-native";
+import { Link, useHistory } from "react-router-native";
 
 import { AUTHORIZED_USER_QUERY } from "../graphql/queries";
 import AuthStorageContext from "../contexts/AuthStorageContext";
@@ -20,10 +20,12 @@ const AppBar = () => {
   const { data } = useQuery(AUTHORIZED_USER_QUERY);
   const authStorage = useContext(AuthStorageContext);
   const apolloClient = useApolloClient();
+  const history = useHistory();
 
   const signOut = async () => {
     await authStorage.removeAccessToken();
     apolloClient.resetStore();
+    history.push("/");
   };
 
   return (
@@ -34,7 +36,12 @@ const AppBar = () => {
         </Link>
 
         {data?.authorizedUser ? (
-          <AppBarTab onPress={signOut}>Sign out</AppBarTab>
+          <>
+            <Link to="/create-review">
+              <AppBarTab>Create a review</AppBarTab>
+            </Link>
+            <AppBarTab onPress={signOut}>Sign out</AppBarTab>
+          </>
         ) : (
           <Link to="/sign-in">
             <AppBarTab>Sign in</AppBarTab>
