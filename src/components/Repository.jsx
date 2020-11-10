@@ -1,4 +1,5 @@
 import { useQuery } from "@apollo/react-hooks";
+import { format } from "date-fns";
 import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { useParams } from "react-router-native";
@@ -59,13 +60,7 @@ const ReviewItem = ({ review }) => {
               {review.user.username}
             </Text>
             <Text color="textSecondary" style={styles.colMargin}>
-              {
-                // use date-fns instead
-                new Date(review.createdAt)
-                  .toLocaleDateString()
-                  .split("/")
-                  .join(".")
-              }
+              {format(new Date(review.createdAt), "dd.MM.yyyy")}
             </Text>
           </View>
 
