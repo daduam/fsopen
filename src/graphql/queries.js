@@ -6,8 +6,11 @@ import {
 } from "./fragments";
 
 export const REPOSITORIES_QUERY = gql`
-  query {
-    repositories {
+  query Repositories(
+    $orderBy: AllRepositoriesOrderBy
+    $orderDirection: OrderDirection
+  ) {
+    repositories(orderBy: $orderBy, orderDirection: $orderDirection) {
       edges {
         node {
           ...RegularRepository
