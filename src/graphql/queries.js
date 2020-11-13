@@ -1,10 +1,6 @@
 import { gql } from "@apollo/react-hooks";
 
-import {
-  AUTH_USER_FRAGMENT,
-  REGULAR_REPOSITORY_FRAGMENT,
-  REVIEW_FRAGMENT,
-} from "./fragments";
+import { REGULAR_REPOSITORY_FRAGMENT, REVIEW_FRAGMENT } from "./fragments";
 
 export const REPOSITORIES_QUERY = gql`
   query Repositories(
@@ -39,13 +35,37 @@ export const REPOSITORIES_QUERY = gql`
 `;
 
 export const AUTHORIZED_USER_QUERY = gql`
-  {
+  query AuthorizedUser(
+    $first: Int
+    $after: String
+    $includeReviews: Boolean = false
+  ) {
     authorizedUser {
-      ...AuthorizedUser
+      id
+      username
+      reviews(first: $first, after: $after) @include(if: $includeReviews) {
+        edges {
+          node {
+            id
+            text
+            rating
+            createdAt
+            user {
+              id
+              username
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          totalCount
+          startCursor
+          endCursor
+        }
+      }
     }
   }
-
-  ${AUTH_USER_FRAGMENT}
 `;
 
 export const REPOSITORY_QUERY = gql`
