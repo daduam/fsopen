@@ -1,24 +1,52 @@
-import { useQuery } from "@apollo/react-hooks";
+import { useMutation, useQuery } from "@apollo/react-hooks";
 import React from "react";
-import { FlatList } from "react-native";
+import { Alert, FlatList } from "react-native";
+import { DELETE_REVIEW_MUTATION } from "../graphql/mutations";
 
 import { AUTHORIZED_USER_QUERY } from "../graphql/queries";
 import ItemSeparator from "./ItemSeparator";
 import ReviewItem from "./ReviewItem";
 
 const MyReviews = () => {
+  const [deleteReview] = useMutation(DELETE_REVIEW_MUTATION);
   const variables = {
     includeReviews: true,
     first: 20,
   };
-  const { data, loading, fetchMore } = useQuery(AUTHORIZED_USER_QUERY, {
-    fetchPolicy: "cache-and-network",
-    variables,
-  });
+  const { data, loading, fetchMore, refetch } = useQuery(
+    AUTHORIZED_USER_QUERY,
+    {
+      fetchPolicy: "cache-and-network",
+      variables,
+    }
+  );
 
   if (!data) {
     return null;
   }
+
+  const handleDelete = (id) => {
+    Alert.alert(
+      "Delete review",
+      "Are you sure you want to delete this review?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await deleteReview({ variables: { id } });
+              await refetch(variables);
+            } catch (err) {
+              console.log(err);
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
   const onEndReach = () => {
     const canFetchMore =
@@ -59,10 +87,12 @@ const MyReviews = () => {
     <FlatList
       data={reviews}
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <ReviewItem review={item} />}
+      renderItem={({ item }) => (
+        <ReviewItem review={item} handleDelete={handleDelete} forUser />
+      )}
       keyExtractor={(item) => item.id}
       onEndReached={onEndReach}
-      onEndReachedThreshold={0.1}
+      onEndReachedThreshold={0.5}
     />
   );
 };

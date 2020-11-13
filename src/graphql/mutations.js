@@ -27,3 +27,9 @@ export const CREATE_USER_MUTATION = gql`
 
   ${AUTH_USER_FRAGMENT}
 `;
+
+export const DELETE_REVIEW_MUTATION = gql`
+  mutation DeleteReview($id: ID!) {
+    deleteReview(id: $id)
+  }
+`;

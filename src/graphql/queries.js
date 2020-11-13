@@ -50,9 +50,9 @@ export const AUTHORIZED_USER_QUERY = gql`
             text
             rating
             createdAt
-            user {
+            repository {
               id
-              username
+              fullName
             }
           }
           cursor
