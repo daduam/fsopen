@@ -1,53 +1,100 @@
-import React from "react";
-import { FlatList, TouchableOpacity } from "react-native";
-import PickerSelect from "react-native-picker-select";
+import React, { useEffect, useState } from "react";
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Searchbar } from "react-native-paper";
+import RNPickerSelect from "react-native-picker-select";
 import { useHistory } from "react-router-native";
+import { useDebounce } from "use-debounce/lib";
 
 import useRepositories from "../hooks/useRepositories";
 import ItemSeparator from "./ItemSeparator";
 import RepositoryItem from "./RepositoryItem";
 
-const Dropdown = ({ handleSelect, selectValue }) => {
+const styles = StyleSheet.create({
+  header: {
+    padding: 16,
+  },
+});
+
+const RepositoryListHeader = ({ handleSelect, handleSearch }) => {
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [debouncedValue] = useDebounce(searchKeyword, 500);
+
+  useEffect(() => {
+    handleSearch(debouncedValue);
+  }, [debouncedValue]);
+
   return (
-    <PickerSelect
-      onValueChange={(value) => handleSelect(value)}
-      value={selectValue}
-      style={{ viewContainer: { paddingHorizontal: 8 } }}
-      items={[
-        {
-          label: "Latest repositories",
-          value: {
-            orderBy: "CREATED_AT",
-            orderDirection: undefined,
+    <View style={styles.header}>
+      <Searchbar
+        placeholder="Search"
+        value={searchKeyword}
+        onChangeText={(query) => setSearchKeyword(query)}
+      />
+      <RNPickerSelect
+        onValueChange={(value) => handleSelect(value)}
+        items={[
+          {
+            label: "Latest repositories",
+            value: {
+              orderBy: "CREATED_AT",
+              orderDirection: undefined,
+            },
           },
-        },
-        {
-          label: "Highest rated repositories",
-          value: {
-            orderBy: "RATING_AVERAGE",
-            orderDirection: "DESC",
+          {
+            label: "Highest rated repositories",
+            value: {
+              orderBy: "RATING_AVERAGE",
+              orderDirection: "DESC",
+            },
           },
-        },
-        {
-          label: "Lowest rated repositories",
-          value: {
-            orderBy: "RATING_AVERAGE",
-            orderDirection: "ASC",
+          {
+            label: "Lowest rated repositories",
+            value: {
+              orderBy: "RATING_AVERAGE",
+              orderDirection: "ASC",
+            },
           },
-        },
-      ]}
-    />
+        ]}
+      />
+    </View>
   );
 };
+
+class RepositoryListContainer extends React.Component {
+  renderHeader = () => {
+    const props = this.props;
+
+    return (
+      <RepositoryListHeader
+        handleSelect={props.handleSelect}
+        handleSearch={props.handleSearch}
+      />
+    );
+  };
+
+  render() {
+    return (
+      <FlatList
+        data={this.props.repositories}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={({ item, index }) => (
+          <TouchableOpacity onPress={() => this.props.handlePress(item.id)}>
+            <RepositoryItem key={index} item={item} />
+          </TouchableOpacity>
+        )}
+        ListHeaderComponent={this.renderHeader}
+      />
+    );
+  }
+}
 
 const RepositoryList = () => {
   const history = useHistory();
   const [variables, setVariables] = React.useState(null);
-  const [selectValue, setSelectValue] = React.useState(null);
   const { repositories } = useRepositories(variables);
 
   const onPress = (id) => {
-    history.push(`/repository/${id}`);
+    history.push(`repository/${id}`);
   };
 
   const repositoryNodes = repositories
@@ -55,23 +102,11 @@ const RepositoryList = () => {
     : [];
 
   return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item, index }) => (
-        <TouchableOpacity onPress={() => onPress(item.id)}>
-          <RepositoryItem key={index} item={item} />
-        </TouchableOpacity>
-      )}
-      ListHeaderComponent={() => (
-        <Dropdown
-          handleSelect={(values) => {
-            setVariables({ ...variables, ...values });
-            setSelectValue(values);
-          }}
-          selectValue={selectValue}
-        />
-      )}
+    <RepositoryListContainer
+      handlePress={onPress}
+      repositories={repositoryNodes}
+      handleSelect={(values) => setVariables({ ...variables, ...values })}
+      handleSearch={(searchKeyword) => setVariables({ searchKeyword })}
     />
   );
 };
