@@ -75,14 +75,46 @@ const ReviewItem = ({ review }) => {
 
 const Repository = () => {
   let { id } = useParams();
-  const { data } = useQuery(REPOSITORY_QUERY, {
-    variables: { id },
+  const variables = { id, first: 20 };
+  const { data, loading, fetchMore } = useQuery(REPOSITORY_QUERY, {
+    variables,
     fetchPolicy: "cache-and-network",
   });
 
   if (!data) {
     return null;
   }
+
+  const onEndReach = () => {
+    const canFetchMore =
+      !loading && data && data.repository.reviews.pageInfo.hasNextPage;
+
+    if (!canFetchMore) {
+      return;
+    }
+
+    fetchMore({
+      query: REPOSITORY_QUERY,
+      variables: {
+        after: data.repository.reviews.pageInfo.endCursor,
+        ...variables,
+      },
+      updateQuery: (previousQueryResult, { fetchMoreResult }) => {
+        return {
+          repository: {
+            ...fetchMoreResult.repository,
+            reviews: {
+              ...fetchMoreResult.repository.reviews,
+              edges: [
+                ...previousQueryResult.repository.reviews.edges,
+                ...fetchMoreResult.repository.reviews.edges,
+              ],
+            },
+          },
+        };
+      },
+    });
+  };
 
   const repository = data.repository;
 
@@ -97,6 +129,8 @@ const Repository = () => {
       renderItem={({ item }) => <ReviewItem review={item} />}
       keyExtractor={(item) => item.id}
       ListHeaderComponent={() => <RepositoryItem item={repository} ghUrl />}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
     />
   );
 };

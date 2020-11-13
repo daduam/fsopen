@@ -83,6 +83,8 @@ class RepositoryListContainer extends React.Component {
           </TouchableOpacity>
         )}
         ListHeaderComponent={this.renderHeader}
+        onEndReached={this.props.onEndReach}
+        onEndReachedThreshold={0.5}
       />
     );
   }
@@ -90,11 +92,18 @@ class RepositoryListContainer extends React.Component {
 
 const RepositoryList = () => {
   const history = useHistory();
-  const [variables, setVariables] = React.useState(null);
-  const { repositories } = useRepositories(variables);
+  const [variables, setVariables] = React.useState({
+    first: 20,
+    orderBy: "CREATED_AT",
+  });
+  const { repositories, fetchMore } = useRepositories(variables);
 
   const onPress = (id) => {
     history.push(`repository/${id}`);
+  };
+
+  const onEndReach = () => {
+    fetchMore();
   };
 
   const repositoryNodes = repositories
@@ -105,8 +114,11 @@ const RepositoryList = () => {
     <RepositoryListContainer
       handlePress={onPress}
       repositories={repositoryNodes}
+      onEndReach={onEndReach}
       handleSelect={(values) => setVariables({ ...variables, ...values })}
-      handleSearch={(searchKeyword) => setVariables({ searchKeyword })}
+      handleSearch={(searchKeyword) =>
+        setVariables({ ...variables, searchKeyword })
+      }
     />
   );
 };
