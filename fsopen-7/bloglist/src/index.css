@@ -1,0 +1,20 @@
+.notify {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: medium;
+  color: white;
+  width: 30vw;
+  min-height: 10vh;
+  padding: 20px;
+  margin: 1em;
+  border-radius: 10px;
+}
+
+.error {
+  background: red;
+}
+
+.success {
+  background: green;
+}
